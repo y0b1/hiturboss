@@ -147,9 +147,19 @@
     }, 400);
   }
 
+  let touchHandled = false;
+
   // Only trigger when the head itself is hit
   function hitHead(event) {
-    if (event.target !== head) return; // Only respond if the head is clicked/touched
+    // Only respond if the head is clicked/touched
+    if (event.target !== head) return;
+
+    // Prevent double trigger on mobile
+    if (event.type === 'touchstart') {
+      if (touchHandled) return;
+      touchHandled = true;
+      setTimeout(() => { touchHandled = false; }, 500);
+    }
 
     ouchSound.currentTime = 0;
     ouchSound.play();
@@ -172,7 +182,7 @@
   }
 
   head.addEventListener('click', hitHead);
-  head.addEventListener('touchstart', hitHead);
+  head.addEventListener('touchstart', hitHead, { passive: false });
   </script>
 
 </body>
