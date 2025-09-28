@@ -58,15 +58,42 @@
 
     .instruction {
       position: absolute;
-      top: 40px;
+      top: 100px; /* Lower the instruction text */
       width: 100%;
       text-align: center;
       z-index: 10;
       font-size: 2em;
       font-weight: bold;
       color: #fff;
-      text-shadow: 2px 2px 8px #000;
-      font-family: Arial, Helvetica, sans-serif; /* Use bold Arial */
+      text-shadow: 2px 2px 8px #000, 0 4px 16px #222; /* Add extra shadow */
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .bam-effect {
+      position: absolute;
+      pointer-events: none;
+      width: 180px;
+      height: auto;
+      z-index: 100;
+      animation: bam-fade 0.2s linear;
+    }
+
+    @keyframes bam-fade {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .apology {
+      position: absolute;
+      top: 230px; /* Lower the apology text */
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      font-size: 1.5em;
+      color: #fff;
+      display: none;
+      font-family: Arial, Helvetica, sans-serif;
+      text-shadow: 2px 2px 8px #000, 0 4px 16px #222; /* Add extra shadow */
     }
   </style>
 </head>
@@ -80,11 +107,45 @@
     <img src="head.png" alt="Head" class="head" id="head">
   </div>
 
+  <div class="apology" id="apology-text"></div>
+
   <audio id="ouch-sound" src="ouch.mp3" preload="auto"></audio>
 
   <script>
   const head = document.getElementById('head');
   const ouchSound = document.getElementById('ouch-sound');
+
+  function showBam(x, y) {
+    const bam = document.createElement('img');
+    bam.src = 'bam.png';
+    bam.className = 'bam-effect';
+    bam.style.left = (x - 90) + 'px'; // Center bam.png horizontally
+    bam.style.top = (y - 90) + 'px';  // Center bam.png vertically
+    document.body.appendChild(bam);
+
+    setTimeout(() => {
+      bam.remove();
+    }, 200);
+  }
+
+  function showApology() {
+    const apologyText = document.getElementById('apology-text');
+    const messages = [
+      "sorry for not paying for overtime",
+      "sorry for making you work for more shifts",
+      "sorry for giving you a low raise",
+      "sorry for making you work weekends",
+      "sorry for not giving you benefits",
+      "sorry for making you work late",
+      "sorry for not appreciating your work",
+      "sorry for giving you shitty coworkers"
+    ];
+    apologyText.textContent = messages[Math.floor(Math.random() * messages.length)];
+    apologyText.style.display = 'block';
+    setTimeout(() => {
+      apologyText.style.display = 'none';
+    }, 400);
+  }
 
   // Only trigger when the head itself is hit
   function hitHead(event) {
@@ -96,6 +157,18 @@
     head.classList.remove('bobble');
     void head.offsetWidth; // reflow to restart animation
     head.classList.add('bobble');
+
+    // Get click/tap coordinates
+    let x, y;
+    if (event.touches && event.touches.length) {
+      x = event.touches[0].clientX;
+      y = event.touches[0].clientY;
+    } else {
+      x = event.clientX;
+      y = event.clientY;
+    }
+    showBam(x, y);
+    showApology(); // Show apology text
   }
 
   head.addEventListener('click', hitHead);
