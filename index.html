@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Head Bobble Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+      overflow: hidden;
+    }
+
+    .character {
+      position: relative;
+      width: 40vw; /* scales with screen width */
+      max-width: 400px; /* don’t get too huge */
+    }
+
+    .body {
+      width: 100%;
+      display: block;
+    }
+
+    .head {
+      position: absolute;
+      bottom: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      transform-origin: bottom center; /* anchor point */
+      cursor: pointer;
+      width: 500px; /* enlarged from 240px */
+      max-width: 95vw; /* allow larger size on small screens */
+      touch-action: manipulation; /* better for mobile */
+    }
+
+    /* Bobble animation */
+    @keyframes bobble {
+      0% { transform: translateX(-50%) rotate(0deg); }
+      20% { transform: translateX(-50%) translateX(-10px); }
+      40% { transform: translateX(-50%) translateX(10px); }
+      60% { transform: translateX(-50%) translateX(-8px); }
+      80% { transform: translateX(-50%) translateX(8px); }
+      100% { transform: translateX(-50%) translateX(0px); }
+    }
+
+    .bobble {
+      animation: bobble 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="character">
+    <img src="body.png" alt="Body" class="body">
+    <img src="head.png" alt="Head" class="head" id="head">
+  </div>
+
+  <audio id="ouch-sound" src="ouch.mp3" preload="auto"></audio>
+
+  <script>
+    const head = document.getElementById('head');
+    const ouchSound = document.getElementById('ouch-sound');
+
+    // For both tap & click
+    function hitHead() {
+      // Play sound
+      ouchSound.currentTime = 0;
+      ouchSound.play();
+
+      // Trigger bobble animation
+      head.classList.remove('bobble');
+      void head.offsetWidth; // reflow to restart animation
+      head.classList.add('bobble');
+    }
+
+    head.addEventListener('click', hitHead);
+    head.addEventListener('touchstart', hitHead);
+  </script>
+
+</body>
+</html>
