@@ -13,12 +13,13 @@
       height: 100vh;
       background: #f0f0f0;
       overflow: hidden;
+      font-size: 1.4em; /* 40% larger base font size */
     }
 
     .character {
       position: relative;
-      width: 40vw; /* scales with screen width */
-      max-width: 400px; /* don’t get too huge */
+      width: 56vw; /* 40% larger than 40vw */
+      max-width: 560px; /* 40% larger than 400px */
     }
 
     .body {
@@ -33,18 +34,18 @@
       transform: translateX(-50%);
       transform-origin: bottom center; /* anchor point */
       cursor: pointer;
-      width: 500px; /* enlarged from 240px */
-      max-width: 95vw; /* allow larger size on small screens */
+      width: 700px; /* 40% larger than 500px */
+      max-width: 133vw; /* 40% larger than 95vw */
       touch-action: manipulation; /* better for mobile */
     }
 
     /* Bobble animation */
     @keyframes bobble {
       0% { transform: translateX(-50%) rotate(0deg); }
-      20% { transform: translateX(-50%) translateX(-10px); }
-      40% { transform: translateX(-50%) translateX(10px); }
-      60% { transform: translateX(-50%) translateX(-8px); }
-      80% { transform: translateX(-50%) translateX(8px); }
+      20% { transform: translateX(-50%) translateX(-14px); } /* 40% larger than 10px */
+      40% { transform: translateX(-50%) translateX(14px); }
+      60% { transform: translateX(-50%) translateX(-11px); } /* 40% larger than 8px */
+      80% { transform: translateX(-50%) translateX(11px); }
       100% { transform: translateX(-50%) translateX(0px); }
     }
 
@@ -63,23 +64,23 @@
   <audio id="ouch-sound" src="ouch.mp3" preload="auto"></audio>
 
   <script>
-    const head = document.getElementById('head');
-    const ouchSound = document.getElementById('ouch-sound');
+  const head = document.getElementById('head');
+  const ouchSound = document.getElementById('ouch-sound');
 
-    // For both tap & click
-    function hitHead() {
-      // Play sound
-      ouchSound.currentTime = 0;
-      ouchSound.play();
+  // Only trigger when the head itself is hit
+  function hitHead(event) {
+    if (event.target !== head) return; // Only respond if the head is clicked/touched
 
-      // Trigger bobble animation
-      head.classList.remove('bobble');
-      void head.offsetWidth; // reflow to restart animation
-      head.classList.add('bobble');
-    }
+    ouchSound.currentTime = 0;
+    ouchSound.play();
 
-    head.addEventListener('click', hitHead);
-    head.addEventListener('touchstart', hitHead);
+    head.classList.remove('bobble');
+    void head.offsetWidth; // reflow to restart animation
+    head.classList.add('bobble');
+  }
+
+  head.addEventListener('click', hitHead);
+  head.addEventListener('touchstart', hitHead);
   </script>
 
 </body>
