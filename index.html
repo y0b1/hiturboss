@@ -23,14 +23,17 @@
     }
 
     .body {
-      width: 100%;
+      width: 120%;         /* Make the body 20% wider */
+      height: 800px;       /* Set a fixed height for the body image */
       display: block;
+      margin-top: 400px;   /* Lower the body */
+      object-fit: contain; /* Ensure the image scales nicely */
     }
 
     .head {
       position: absolute;
-      bottom: -100%;
-      left: 50%;
+      bottom: -15%;
+      left: 60%;
       transform: translateX(-50%);
       transform-origin: bottom center; /* anchor point */
       cursor: pointer;
@@ -52,9 +55,25 @@
     .bobble {
       animation: bobble 0.2s ease;
     }
+
+    .instruction {
+      position: absolute;
+      top: 40px;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      font-size: 2em;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 2px 2px 8px #000;
+      font-family: Arial, Helvetica, sans-serif; /* Use bold Arial */
+    }
   </style>
 </head>
 <body>
+  <div class="instruction">
+    TAP ON THE HEAD TO HIT!
+  </div>
 
   <div class="character">
     <img src="body.png" alt="Body" class="body">
